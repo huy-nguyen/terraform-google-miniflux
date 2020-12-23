@@ -9,7 +9,7 @@ provider "google-beta" {
 
 module "miniflux" {
   source  = "huy-nguyen/miniflux/google"
-  version = "0.1.0"
+  version = "1.0.0"
 
   subnet_ip_range = "192.168.0.0/20"
   region          = "us-east1"
