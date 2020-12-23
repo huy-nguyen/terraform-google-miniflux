@@ -71,7 +71,10 @@ variable "db_user_name" {
 }
 
 variable "db_user_password" {
-  description = "The password that the Miniflux application will use to access the PostgreSQL database"
+  description = <<-EOT
+  The password that the Miniflux application will use to access the PostgreSQL database.
+  It's highly recommended to pick a password without spaces because it will be used as part of a URL.
+  EOT
   type        = string
   sensitive   = true
 }
