@@ -25,14 +25,14 @@ variable "private_services_access_ip_range" {
 
   type = object({
     starting_address = string,
-    prefix_length = number
+    prefix_length    = number
   })
 }
 
 variable "serverless_vpc_access_connector_name" {
-  type = string
+  type        = string
   description = "Name for the Serverless VPC Access Connector with which the App Engine will use to connect with the SQL database."
-  default = "miniflux-connector"
+  default     = "miniflux-connector"
 }
 
 variable "serverless_vpc_access_connector_ip_range" {
@@ -50,27 +50,27 @@ variable "sql_instance_machine_type" {
   The machine type for your SQL instance.
   See https://cloud.google.com/sql/docs/postgres/create-instance#machine-types.
   EOT
-  type = string
+  type        = string
 }
 
 variable "sql_instance_disk_type" {
   description = "Whether the SQL instance will use HDD or SSD."
-  type = string
-  default = "PD_SSD"
+  type        = string
+  default     = "PD_SSD"
 }
 
 variable "db_name" {
-  type = string
+  type        = string
   description = "The name of the PostgreSQL database that the Miniflux application will use"
-  default = "miniflux-db"
+  default     = "miniflux-db"
 }
 variable "db_user_name" {
-  type = string
+  type        = string
   description = "The username that the Miniflux application will use to access the PostgreSQL database"
-  default = "miniflux"
+  default     = "miniflux"
 }
 
 variable "db_user_password" {
   description = "The password that the Miniflux application will use to access the PostgreSQL database"
-  type = string
+  type        = string
 }
