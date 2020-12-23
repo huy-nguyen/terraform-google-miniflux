@@ -73,4 +73,5 @@ variable "db_user_name" {
 variable "db_user_password" {
   description = "The password that the Miniflux application will use to access the PostgreSQL database"
   type        = string
+  sensitive   = true
 }
