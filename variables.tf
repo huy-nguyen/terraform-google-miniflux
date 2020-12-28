@@ -1,17 +1,12 @@
-variable "subnet_ip_range" {
-  description = <<-EOT
-  IP CIDR range for the subnetwork.
-  See https://www.terraform.io/docs/providers/google/d/compute_subnetwork.html#ip_cidr_range.
-  EOT
-  type        = string
-}
-
 variable "region" {
-  description = "A valid Google Cloud Platform region."
+  description = "The Google Cloud Platform region for App Engine."
   type        = string
 }
 variable "zone" {
-  description = "A valid Google Cloud Platform zone."
+  description = <<-EOT
+  The Google Cloud Platform zone for the PostgreSQL database.
+  This zone should be within the region selected for the "region" input variable.
+  EOT
   type        = string
 }
 

@@ -1,7 +1,13 @@
 # Miniflux for Google Cloud Platform (GCP) App Engine
 
-This Terraform module sets up the infrastructure, such as the VPC network and database, to run [Miniflux](https://miniflux.app/), a free and open-source feed reader, in App Engine on Google Cloud Platform.
-Note that this module does not set up App Engine itself, just all the infrastructure that the App Engine will need to function properly.
+This Terraform module sets up the infrastructure (such as the VPC network and database) to run [Miniflux](https://miniflux.app/), a free and open-source feed reader, in App Engine on Google Cloud Platform (GCP) in a secure manner.
+Security means that this setup uses GCP's [private services access](https://cloud.google.com/sql/docs/postgres/private-ip) to restrict access so that the PostgreSQL database is accessible only through the browser-based user interface served up by App Engine and not exposed to the public internet.
+Below is a diagram of how the infrastructure is set up based on this [sample Terraform config](https://github.com/huy-nguyen/terraform-google-miniflux/blob/master/examples/minimal.tf):
+
+![Cloud infrastructure diagram](diagram.svg)
+
+Note that this Terraform module does not set up App Engine itself, just all the infrastructure that App Engine will need to function properly.
+However, I've included instructions on how to use the outputs from the module to create the configuration for App Engine.
 
 # Prerequisites
 
@@ -14,7 +20,7 @@ Before starting, you will have to enable the following Google APIs in your proje
 - SQL Admin API (`sqladmin.googleapis.com`).
 - App Engine Admin API (`appengine.googleapis.com`).
 
-You will also have to give the following IAM roles to the service account whose credentials Terraform will use to run:
+Create a service account for Terraform and give the following IAM roles to that service account:
 
 - Compute Network Admin (`roles/compute.networkAdmin`).
 - Service Networking Admin (`roles/servicenetworking.networksAdmin`).
@@ -23,7 +29,7 @@ You will also have to give the following IAM roles to the service account whose 
 
 # Infrastructure provisioning
 
-You can use the example Terraform config [here](examples/minimal.tf) as a starting point.
+You can use the provided [sample Terraform config](https://github.com/huy-nguyen/terraform-google-miniflux/blob/master/examples/minimal.tf) as a starting point.
 
 Run the following commands:
 
@@ -52,7 +58,7 @@ env_variables:
   ADMIN_USERNAME: pick any name you want for the initial login
   ADMIN_PASSWORD: pick any password you want for the initial login
   RUN_MIGRATIONS: 1
-  DATABASE_URL: value of the database_url output. Remember to substitute the placeholder password with your real password
+  DATABASE_URL: value of the database_url output. Remember to substitute the placeholder password with the real password i.e. the Terraform input variable "db_user_password"
 ```
 
 - We'll use the `gcloud` CLI to deploy to App Engine.
@@ -63,7 +69,7 @@ env_variables:
   If the project is not correct, run `gcloud config set project [PROJECT-NAME]` to set it.
 - Run `gcloud app deploy`.
   You will be prompted to choose a region.
-  It's best to pick the same region that you provided to Terraform earlier.
+  Pick the same region as the `region` input variable of this Terraform module.
 - After the first App Engine version has been created, you _might_ have to give the default App Engine service account the Cloud SQL Client role (`roles/cloudsql.client`) so that it can access the database.
   This service account's email address has the form `YOUR_PROJECT_ID@appspot.gserviceaccount.com`.
 

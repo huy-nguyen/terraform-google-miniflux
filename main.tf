@@ -7,13 +7,6 @@ resource "google_compute_network" "network" {
   auto_create_subnetworks = "false"
 }
 
-resource "google_compute_subnetwork" "subnet" {
-  name          = "miniflux-subnet"
-  ip_cidr_range = var.subnet_ip_range
-  region        = var.region
-  network       = google_compute_network.network.self_link
-}
-
 resource "google_compute_global_address" "private_services_access_reserved_ip_range" {
   provider      = google-beta
   name          = join("-", ["google-managed-services", local.network_name])
