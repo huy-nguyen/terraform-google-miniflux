@@ -14,7 +14,7 @@ variable "private_services_access_ip_range" {
 
   description = <<-EOT
   An internal IP CIDR range allocated to Google Cloud for Private Services Access.
-  It must be a /28 range and should not overlap with the IP range of any of your existing subnetworks.
+  It should not overlap with the IP range of any of your existing subnetworks.
   See https://cloud.google.com/vpc/docs/private-access-options#service-networking.
   EOT
 
