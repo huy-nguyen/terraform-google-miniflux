@@ -29,9 +29,10 @@ resource "random_id" "sql_instance_name_suffix" {
 
 resource "google_sql_database_instance" "sql_instance" {
 
-  name             = "miniflux-sql-instance-${random_id.sql_instance_name_suffix.hex}"
-  region           = var.region
-  database_version = "POSTGRES_12"
+  name                = "miniflux-sql-instance-${random_id.sql_instance_name_suffix.hex}"
+  region              = var.region
+  database_version    = "POSTGRES_12"
+  deletion_protection = "false"
 
   depends_on = [
     google_service_networking_connection.private_services_access_peering_connection
@@ -44,7 +45,7 @@ resource "google_sql_database_instance" "sql_instance" {
       zone = var.zone
     }
     ip_configuration {
-      ipv4_enabled    = false
+      ipv4_enabled    = "false"
       private_network = google_compute_network.network.id
     }
   }

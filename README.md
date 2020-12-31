@@ -17,7 +17,7 @@ Before starting, you will have to enable the following Google APIs in your proje
 - Service Networking API (`servicenetworking.googleapis.com`).
 - Cloud Resource Manager API (`cloudresourcemanager.googleapis.com`).
 - Serverless VPC Access API (`vpcaccess.googleapis.com`).
-- SQL Admin API (`sqladmin.googleapis.com`).
+- Cloud SQL Admin API (`sqladmin.googleapis.com`).
 - App Engine Admin API (`appengine.googleapis.com`).
 
 Create a service account for Terraform and give the following IAM roles to that service account:
