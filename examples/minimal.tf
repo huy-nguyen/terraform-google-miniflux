@@ -2,14 +2,10 @@ provider "google" {
   credentials = file("path_to_file.json")
   project     = "my-project-id"
 }
-provider "google-beta" {
-  credentials = file("path_to_file.json")
-  project     = "my-project-id"
-}
 
 module "miniflux" {
   source  = "huy-nguyen/miniflux/google"
-  version = "2.0.0"
+  version = "3.0.0"
 
   region = "us-east1"
   zone   = "us-east1-d"

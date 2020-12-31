@@ -2,13 +2,11 @@ locals {
   network_name = "miniflux-network"
 }
 resource "google_compute_network" "network" {
-  provider                = google-beta
   name                    = local.network_name
   auto_create_subnetworks = "false"
 }
 
 resource "google_compute_global_address" "private_services_access_reserved_ip_range" {
-  provider      = google-beta
   name          = join("-", ["google-managed-services", local.network_name])
   address       = var.private_services_access_ip_range.starting_address
   prefix_length = var.private_services_access_ip_range.prefix_length
@@ -18,9 +16,8 @@ resource "google_compute_global_address" "private_services_access_reserved_ip_ra
 }
 
 resource "google_service_networking_connection" "private_services_access_peering_connection" {
-  provider = google-beta
-  network  = google_compute_network.network.self_link
-  service  = "servicenetworking.googleapis.com"
+  network = google_compute_network.network.self_link
+  service = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [
     google_compute_global_address.private_services_access_reserved_ip_range.name
   ]
@@ -31,7 +28,6 @@ resource "random_id" "sql_instance_name_suffix" {
 }
 
 resource "google_sql_database_instance" "sql_instance" {
-  provider = google-beta
 
   name             = "miniflux-sql-instance-${random_id.sql_instance_name_suffix.hex}"
   region           = var.region
