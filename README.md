@@ -41,7 +41,7 @@ Ensure that the credentials (e.g. your own account or a service account) used by
 
 # Infrastructure provisioning
 
-You can use the provided [sample Terraform config](https://github.com/huy-nguyen/terraform-google-miniflux/blob/master/examples/basic/) as a starting point.
+You can use the provided [sample Terraform config](https://github.com/huy-nguyen/terraform-google-miniflux/tree/master/examples/basic) as a starting point.
 
 First, ensure that you're authenticated by following [these instructions](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_reference#authentication), then run the following commands:
 

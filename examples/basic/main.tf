@@ -1,6 +1,6 @@
 module "miniflux" {
   source  = "huy-nguyen/miniflux/google"
-  version = "5.0.0"
+  version = "5.0.1"
 
   project_id = "my-project-id"
   region     = "us-east1"
