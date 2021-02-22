@@ -4,6 +4,7 @@ locals {
 resource "google_compute_network" "network" {
   name                    = local.network_name
   auto_create_subnetworks = "false"
+  project                 = var.project_id
 }
 
 resource "google_compute_global_address" "private_services_access_reserved_ip_range" {
@@ -13,6 +14,7 @@ resource "google_compute_global_address" "private_services_access_reserved_ip_ra
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
   network       = google_compute_network.network.self_link
+  project       = var.project_id
 }
 
 resource "google_service_networking_connection" "private_services_access_peering_connection" {
@@ -33,6 +35,7 @@ resource "google_sql_database_instance" "sql_instance" {
   region              = var.region
   database_version    = "POSTGRES_12"
   deletion_protection = "false"
+  project             = var.project_id
 
   depends_on = [
     google_service_networking_connection.private_services_access_peering_connection
@@ -54,12 +57,14 @@ resource "google_sql_database_instance" "sql_instance" {
 resource "google_sql_database" "db" {
   name     = var.db_name
   instance = google_sql_database_instance.sql_instance.name
+  project  = var.project_id
 }
 
 resource "google_sql_user" "db_user" {
   name     = var.db_user_name
   instance = google_sql_database_instance.sql_instance.id
   password = var.db_user_password
+  project  = var.project_id
 }
 
 resource "google_vpc_access_connector" "vpc_access_connector" {
@@ -67,4 +72,5 @@ resource "google_vpc_access_connector" "vpc_access_connector" {
   region        = var.region
   ip_cidr_range = var.serverless_vpc_access_connector_ip_range
   network       = google_compute_network.network.name
+  project       = var.project_id
 }

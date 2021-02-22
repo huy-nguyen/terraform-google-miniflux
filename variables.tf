@@ -1,3 +1,8 @@
+variable "project_id" {
+  description = "The Google Cloud project ID in which resources will be created."
+  type        = string
+
+}
 variable "region" {
   description = "The Google Cloud Platform region for App Engine."
   type        = string
