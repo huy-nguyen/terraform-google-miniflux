@@ -1,10 +1,22 @@
 # Miniflux for Google Cloud Platform (GCP) App Engine
 
 This Terraform module sets up the infrastructure (such as the VPC network and database) to run [Miniflux](https://miniflux.app/), a free and open-source feed reader, in App Engine on Google Cloud Platform (GCP) in a secure manner.
-Security means that this setup uses GCP's [private services access](https://cloud.google.com/sql/docs/postgres/private-ip) to restrict access so that the PostgreSQL database is accessible only through the browser-based user interface served up by App Engine and not exposed to the public internet.
+
 Below is a diagram of how the infrastructure is set up based on this [sample Terraform config](https://github.com/huy-nguyen/terraform-google-miniflux/blob/master/examples/minimal.tf):
 
 ![Cloud infrastructure diagram](diagram.svg)
+
+The [infrastructure requirements](https://miniflux.app/docs/requirements.html) to run Miniflux are fairly minimal: a Linux operating system and a PostgreSQL database.
+The end-user accesses Miniflux through a browser-based user interface served by an App Engine instance on a public IP address.
+This setup uses [private services access](https://cloud.google.com/vpc/docs/private-services-access), which allows service providers (Google itself in this case) to provide services (a PostgreSQL database) on internal IP addresses (192.168.16.3).
+This is a win in terms of security (the database is never exposed to the public internet and its associated risks), performance (communication using private IP addresses has lower latency than that using public IP addresses) and costs (no [network egress traffic](https://cloud.google.com/vpc/network-pricing#general) is charged).
+The database's privacy is guaranteed because it actually resides in a completely separate VPC network managed by Google.
+That VPC network is in turn created by a project also managed by Google.
+Communication between your project's network and the Google-managed VPC network containing the database is enabled by [VPC network peering](https://cloud.google.com/vpc/docs/vpc-peering).
+To make this peering work, a private IP address range (192.168.16.0/20) is reserved in your VPC network so that Google can use that range to provision an IP address for the database (notice that 192.168.16.3 is within 192.168.16.0/20).
+Because the App Engine instance is not part of the VPC network and the database is only reachable via an internal IP address, this module also creates a [serverless VPC access connector](https://cloud.google.com/vpc/docs/configure-serverless-vpc-access) to allow the App Engine to communicate with the database.
+You can think of this connector as a tiny network address translation (NAT) machine just for the App Engine instance.
+(In fact, this connector is [priced by Google](https://cloud.google.com/vpc/network-pricing#serverless-vpc-pricing) as "one `e2-micro` instance per 100 Mbps of throughput".)
 
 Note that this Terraform module does not set up App Engine itself, just all the infrastructure that App Engine will need to function properly.
 However, I've included instructions on how to use the outputs from the module to create the configuration for App Engine.
@@ -20,7 +32,7 @@ Before starting, you will have to enable the following Google APIs in your proje
 - Cloud SQL Admin API (`sqladmin.googleapis.com`).
 - App Engine Admin API (`appengine.googleapis.com`).
 
-Create a service account for Terraform and give the following IAM roles to that service account:
+Ensure that the credentials (e.g. your own account or a service account) used by Terraform are granted the following IAM roles on the project:
 
 - Compute Network Admin (`roles/compute.networkAdmin`).
 - Service Networking Admin (`roles/servicenetworking.networksAdmin`).
@@ -31,7 +43,7 @@ Create a service account for Terraform and give the following IAM roles to that 
 
 You can use the provided [sample Terraform config](https://github.com/huy-nguyen/terraform-google-miniflux/blob/master/examples/basic/) as a starting point.
 
-Run the following commands:
+First, ensure that you're authenticated by following [these instructions](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_reference#authentication), then run the following commands:
 
 - `terraform init`
 - `terraform plan`
