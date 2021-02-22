@@ -2,7 +2,7 @@
 
 This Terraform module sets up the infrastructure (such as the VPC network and database) to run [Miniflux](https://miniflux.app/), a free and open-source feed reader, in App Engine on Google Cloud Platform (GCP) in a secure manner.
 
-Below is a diagram of how the infrastructure is set up based on this [sample Terraform config](https://github.com/huy-nguyen/terraform-google-miniflux/blob/master/examples/minimal.tf):
+Below is a diagram of how the infrastructure is set up based on this [sample Terraform config](https://github.com/huy-nguyen/terraform-google-miniflux/tree/master/examples/basic):
 
 ![Cloud infrastructure diagram](diagram.svg)
 
