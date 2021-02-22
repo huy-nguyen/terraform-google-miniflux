@@ -29,7 +29,7 @@ Create a service account for Terraform and give the following IAM roles to that 
 
 # Infrastructure provisioning
 
-You can use the provided [sample Terraform config](https://github.com/huy-nguyen/terraform-google-miniflux/blob/master/examples/minimal.tf) as a starting point.
+You can use the provided [sample Terraform config](https://github.com/huy-nguyen/terraform-google-miniflux/blob/master/examples/basic/) as a starting point.
 
 Run the following commands:
 
